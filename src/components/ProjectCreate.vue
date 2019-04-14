@@ -52,49 +52,67 @@
       </div>
       <div class="form margin_auto">
         <label for="exampleFormControlSelect1" class="form_label">Дата старта</label>
-        <v-date-picker v-model="project.date_start"></v-date-picker>
+        <v-date-picker v-model="dateStart"></v-date-picker>
       </div>
       <div class="form margin_auto">
         <label for="exampleFormControlSelect1" class="form_label">Дата окончания</label>
-        <v-date-picker v-model="project.date_end"></v-date-picker>
+        <v-date-picker v-model="dateEnd"></v-date-picker>
       </div>
       <button type="submit" class="btn btn-primary kn_but">Создать</button>
     </form>
+    <Modal v-if="success" @close="success = false">
+      <template slot="header">Проект создан</template>
+      <template slot="body">Вы успешно создали проект</template>
+    </Modal>
   </div>
 </template>
 
 <script>
 import instance from "@/api.js";
+import moment from "moment";
+import Modal from "@/components/Modal";
 export default {
+  components: {
+    Modal
+  },
   data: () => ({
     project: {
-      users: [],
+      users: ["http://127.0.0.1:8000/api/user/1/"],
       slug: "",
       name: "",
       description: "",
-      date_start: "",
-      date_end: "",
+      date_start: moment(new Date()).format("YYYY-MM-DD"),
+      date_end: null,
       is_active: true
     },
-    users: []
+    dateStart: new Date(),
+    dateEnd: null,
+    users: [],
+    success: true
   }),
   computed: {},
+  watch: {
+    dateStart: function(newDate, oldDate) {
+      this.project.date_start = moment(newDate).format("YYYY-MM-DD");
+    },
+    dateEnd: function(newDate, oldDate) {
+      this.project.date_end = moment(newDate).format("YYYY-MM-DD");
+    }
+  },
   methods: {
     createProject() {
-      instance
-        .post("/project/projects/", this.project)
-        .then(response => console.log(response));
+      console.log(this.project);
+      instance.post("/project/projects/", this.project).then(response => {
+        if (response.statusText == "Created") {
+          this.success = true;
+        }
+      });
     },
-    findUser: event => {
-      console.log(this);
+    findUser(event) {
       const email = event.target.value;
       if (email.length > 2) {
         instance
-          .get("/users", {
-            params: {
-              email: email
-            }
-          })
+          .get("/auth/users")
           .then(response => console.log(response))
           .catch(error => console.log(error));
       }
@@ -103,7 +121,12 @@ export default {
       this.project.users.push(user);
     },
     createSlug(event) {
-      let name = event.target.value.toLowerCase().split("");
+      let name = event.target.value.toLowerCase();
+      name = name.replace(/[\.\\/*,<>?!+=\|;:'"\[\]{}\+@#$%^&№"]/gi, "");
+      name = name.replace(/\s+/gi, "_");
+      name = name.replace(/-+/gi, "-");
+      name = name.replace(/^_/gi, "");
+      name = name.split("");
       let translit = new Map();
       translit
         .set("а", "a")
@@ -148,7 +171,8 @@ export default {
           translitedName.push(symbol);
         }
       }
-      this.project.slug = translitedName.join("");
+      let slug = translitedName.join("");
+      this.project.slug = slug;
     }
   }
 };
