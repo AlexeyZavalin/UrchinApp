@@ -13,17 +13,6 @@
         >
       </div>
       <div class="form margin_auto form_user">
-        <label for="exampleFormControlInput1" class="form_label">slug</label>
-        <input
-          type="text"
-          class="form-control"
-          v-model="project.slug"
-          placeholder="slug"
-          required
-          disabled
-        >
-      </div>
-      <div class="form margin_auto form_user">
         <label for="exampleFormControlTextarea1" class="form_label">Описание проекта</label>
         <textarea
           class="form-control"
@@ -50,13 +39,21 @@
           >{{ user.email }}</div>
         </div>
       </div>
-      <div class="form margin_auto">
-        <label for="exampleFormControlSelect1" class="form_label">Дата старта</label>
-        <v-date-picker v-model="dateStart"></v-date-picker>
-      </div>
-      <div class="form margin_auto">
-        <label for="exampleFormControlSelect1" class="form_label">Дата окончания</label>
-        <v-date-picker v-model="dateEnd"></v-date-picker>
+      <div class="form_user">
+        <div class="row">
+          <div class="col-sm-6 col-12">
+            <div class="form margin_auto">
+              <label for="exampleFormControlSelect1" class="form_label">Дата старта</label>
+              <v-date-picker v-model="dateStart"></v-date-picker>
+            </div>
+          </div>
+          <div class="col-sm-6 col-12">
+            <div class="form margin_auto">
+              <label for="exampleFormControlSelect1" class="form_label">Дата окончания</label>
+              <v-date-picker v-model="dateEnd"></v-date-picker>
+            </div>
+          </div>
+        </div>
       </div>
       <button type="submit" class="btn btn-primary kn_but">Создать</button>
     </form>
@@ -78,7 +75,6 @@ export default {
   data: () => ({
     project: {
       users: ["http://127.0.0.1:8000/api/user/1/"],
-      slug: "",
       name: "",
       description: "",
       date_start: moment(new Date()).format("YYYY-MM-DD"),
@@ -88,7 +84,7 @@ export default {
     dateStart: new Date(),
     dateEnd: null,
     users: [],
-    success: true
+    success: false
   }),
   computed: {},
   watch: {
@@ -119,60 +115,6 @@ export default {
     },
     addUser(user) {
       this.project.users.push(user);
-    },
-    createSlug(event) {
-      let name = event.target.value.toLowerCase();
-      name = name.replace(/[\.\\/*,<>?!+=\|;:'"\[\]{}\+@#$%^&№"]/gi, "");
-      name = name.replace(/\s+/gi, "_");
-      name = name.replace(/-+/gi, "-");
-      name = name.replace(/^_/gi, "");
-      name = name.split("");
-      let translit = new Map();
-      translit
-        .set("а", "a")
-        .set("б", "b")
-        .set("в", "v")
-        .set("г", "g")
-        .set("д", "d")
-        .set("е", "e")
-        .set("ё", "yo")
-        .set("ж", "zh")
-        .set("з", "z")
-        .set("и", "i")
-        .set("й", "y")
-        .set("к", "k")
-        .set("л", "l")
-        .set("м", "m")
-        .set("н", "n")
-        .set("о", "o")
-        .set("п", "p")
-        .set("р", "r")
-        .set("с", "s")
-        .set("т", "t")
-        .set("у", "u")
-        .set("ф", "f")
-        .set("х", "h")
-        .set("ц", "c")
-        .set("ч", "ch")
-        .set("ш", "sh")
-        .set("щ", "sh")
-        .set("ъ", "")
-        .set("ы", "y")
-        .set("ь", "")
-        .set("э", "e")
-        .set("ю", "yu")
-        .set("я", "ya")
-        .set(" ", "_");
-      let translitedName = [];
-      for (let symbol of name) {
-        if (translit.get(symbol)) {
-          translitedName.push(translit.get(symbol));
-        } else {
-          translitedName.push(symbol);
-        }
-      }
-      let slug = translitedName.join("");
-      this.project.slug = slug;
     }
   }
 };

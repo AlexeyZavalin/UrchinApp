@@ -1,20 +1,31 @@
 <template>
-  <div class="component">
-    <div class="project" v-for="project in projects" :key="project.slug">
-      {{ project.name }}
-      {{ project.description }}
+  <div class="lendingContent">
+    <p class="ZagolForLending">Для начала работы нужно выполнить 3 простых шага:</p>
+    <p class="textForLending">
+      Шаг номер 1:
+      <br>
+      <br>Войти или
+      <br>зарегистрироваться
+    </p>
+    <img src="imgForFirst/singAndReg.png" alt class="imgFirst">
+    <p class="textForLending">
+      Шаг номер 2:
+      <br>
+      <br>Создать проект
+    </p>
+    <img src="imgForFirst/NewProject.png" alt class="imgFirst">
+    <p class="textForLending">
+      Шаг номер 3:
+      <br>
+      <br>Пригласить участников
+      <br>и распределить задачи
+    </p>
+    <img src="imgForFirst/Peoples.png" alt class="imgFirst">
+
+    <div class="knopky">
+      <a href="registration.html" class="button btn button_sl1">начать</a>
+      <a href="sing_in.html" class="button btn button_sl1">войти</a>
     </div>
-    <form @submit.prevent="createProject">
-      <input type="text" v-model="project.name" placeholder="Название">
-      <br>
-      <input type="text" v-model="project.description" placeholder="Описание">
-      <br>
-      <input type="text" v-model="project.date_start" placeholder="Дата начала">
-      <br>
-      <input type="text" v-model="project.date_end" placeholder="Дата окончания">
-      <br>
-      <input type="submit" value="Создать">
-    </form>
   </div>
 </template>
 

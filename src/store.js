@@ -6,11 +6,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    user: null
+    user: null,
+    page: null
   },
   mutations: {
     setUser(state, payload) {
       state.user = payload;
+    },
+    setPage(state, payload) {
+      state.page = payload
     }
   },
   actions: {
@@ -25,17 +29,22 @@ export default new Vuex.Store({
         .catch(error => console.log(error))
     },
     userLogout(context, payload) {
-      axios
-        .post('http://127.0.0.1:8000/auth/token/logout', {
-          token: payload.auth_token
+      instance
+        .post('/auth/token/logout')
+        .then(response => {
+          if (response.status === 204) {
+            context.commit('setUser', null)
+          }
         })
-        .then(response => console.log(response))
         .catch(error => console.log(error))
     }
   },
   getters: {
     user(state) {
       return state.user
+    },
+    page(state) {
+      return state.page
     }
   }
 })

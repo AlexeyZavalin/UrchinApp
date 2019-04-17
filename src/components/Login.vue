@@ -141,7 +141,7 @@ export default {
     currentUser(value) {
       if (value !== null && value !== undefined) {
         this.$router.push("/");
-        this.$localStorage.set("user", value, 864000000);
+        this.$localStorage.set("token", value.auth_token, 864000000);
       }
     }
   },
