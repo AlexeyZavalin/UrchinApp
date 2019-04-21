@@ -155,4 +155,24 @@ export default {
 
 
 <style scoped lang="less">
+.form_sing {
+  margin-top: 60px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+.text_sing {
+  text-align: center;
+}
+button[type="submit"] {
+  font-size: 18px;
+  font-family: "Poiret One", cursive;
+  font-weight: bold;
+  align-items: center;
+  border-radius: 10px;
+  min-width: 200px;
+  margin-right: 30px;
+  margin-left: 30px;
+  background-color: #e85e2b;
+  color: white;
+}
 </style>

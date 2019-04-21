@@ -6,21 +6,17 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    user: null,
-    page: null
+    user: null
   },
   mutations: {
     setUser(state, payload) {
       state.user = payload;
-    },
-    setPage(state, payload) {
-      state.page = payload
     }
   },
   actions: {
     signUserIn(context, payload) {
       instance
-        .post('/auth/token/login', payload)
+        .post('/auth/token/login/', payload)
         .then(response => {
           if (response.status === 200) {
             context.commit('setUser', response.data)
@@ -28,9 +24,17 @@ export default new Vuex.Store({
         })
         .catch(error => console.log(error))
     },
+    signUserUp(context, payload) {
+      instance
+        .post('/api/register/', payload)
+        .then(response => {
+          console.log(response);
+        })
+        .catch(error => console.log(error))
+    },
     userLogout(context, payload) {
       instance
-        .post('/auth/token/logout')
+        .post('/auth/token/logout/')
         .then(response => {
           if (response.status === 204) {
             context.commit('setUser', null)
@@ -42,9 +46,6 @@ export default new Vuex.Store({
   getters: {
     user(state) {
       return state.user
-    },
-    page(state) {
-      return state.page
     }
   }
 })

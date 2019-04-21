@@ -1,32 +1,16 @@
 <template>
-  <div class="card">
-    <div class="card-image">
-      <img :src="project.image" class="card-img-top" :alt="project.name">
-    </div>
-    <div class="card-body">
-      <h5 class="card-title">{{ project.name }}</h5>
-      <p class="card-text">{{ project.description }}</p>
-      <router-link
-        :to="{ name: 'projectDetail', params: { id: extractId(project.url) }}"
-        class="btn btn-success but_gallery"
-      >Подробнее</router-link>
-    </div>
+  <div class="description">
+    <p class="text_description well well-lg">
+      {{ task.name }}
+      <span class="badge pull-right check_task">Выполняю</span>
+    </p>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    project: Object
-  },
-  data() {
-    return {};
-  },
-  methods: {
-    extractId(url) {
-      let partsUrl = url.split("/");
-      return partsUrl[partsUrl.length - 2];
-    }
+    task: Object
   }
 };
 </script>

@@ -9,6 +9,7 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "bootstrap-4-theme": "^1.0.2",
     "popper.js": "^1.15.0",
     "v-calendar": "^1.0.0-beta.4",
     "vue": "^2.6.6",

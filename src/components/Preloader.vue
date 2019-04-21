@@ -1,14 +1,17 @@
 <template>
-  <div class="loading" v-bind:class="visible ? 'loading_visible': 'loading_invisible'">
+  <div
+    class="loading"
+    :class="visible ? 'loading_visible': 'loading_invisible'"
+  >
     <div class="lds-roller">
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
+      <div />
+      <div />
+      <div />
+      <div />
+      <div />
+      <div />
+      <div />
+      <div />
     </div>
   </div>
 </template>

@@ -9,7 +9,7 @@
 import Main from '@/components/Main.vue'
 
 export default {
-  name: 'home',
+  name: 'Home',
   components: {
     Main
   }

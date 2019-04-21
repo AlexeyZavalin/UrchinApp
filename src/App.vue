@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="wrapper">
-    <preloader v-bind:visible="loading"></preloader>
+    <preloader :visible="loading"/>
     <div class="container-fluid">
       <div class="top">
         <header class="header">
@@ -12,39 +12,26 @@
           </div>
           <ul class="nav menu_header">
             <li class="nav-item" v-for="item in menuItems" :key="item.to">
-              <router-link class="nav-link menu_link_ac marg15" :to="item.to">{{ item.title }}</router-link>
+              <router-link
+                class="nav-link menu_link_ac marg15"
+                :to="{name: item.name}"
+              >{{ item.title }}</router-link>
             </li>
-            <!-- <li class="nav-item">
-                        <a class="nav-link menu_link_ac marg15" href="sing_in.html">войти</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link menu_link_ac marg15" href="registration.html">регистрация</a>
-                    </li>
-                                      <li class="nav-item">
-                        <a class="nav-link menu_link_ac marg15" href="gallery_projects.html">галерея проектов</a>
-                    </li>
-                                       <li class="nav-item">
-                        <a class="nav-link menu_link_ac marg15" href="admin/admin.html">админка</a>
-                    </li>
-                                                           <li class="nav-item">
-                        <a class="nav-link menu_link_ac marg15" href="user/user_main.html">кабинет</a>
-            </li>-->
           </ul>
         </header>
       </div>
     </div>
-    <main class="content container-fluid">
-      <transition name="fade">
+    <main class="content">
+      <div class="container-fluid">
         <router-view/>
-      </transition>
+      </div>
     </main>
-    <footer class="footer container-fluid"></footer>
+    <footer class="footer container-fluid"/>
   </div>
 </template>
 
 <script>
 import Preloader from "./components/Preloader";
-import instance from "@/api.js";
 
 export default {
   components: {
@@ -88,7 +75,7 @@ export default {
   methods: {
     checkRoute(route) {
       if (route.path === "/logout") {
-        this.$store.dispatch("userLogout", this.$localStorage.get("user"));
+        this.$store.dispatch("userLogout");
         this.$localStorage.remove("token");
         this.$router.push("/");
       }
@@ -109,7 +96,7 @@ export default {
   mounted() {
     setTimeout(() => {
       this.loading = false;
-    }, 1000);
+    }, 500);
   }
 };
 </script>
@@ -490,26 +477,11 @@ inst:hover {
 }
 
 .container_sing {
-  /*    background-color: #e85e2b;*/
-  /*    background-color: rgba(232, 94, 43, 54%);*/
-  /*    background-color: rgba(128, 128, 128, 54%);*/
   min-height: 550px;
 }
 
 .container-fluid {
   font-family: "Russo One", sans-serif;
-}
-
-.form_sing {
-  /*
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-*/
-  text-align: center;
-  min-height: 440px;
-  /*   background-color: dimgray;*/
-  margin-top: 60px;
 }
 
 .breadcrumb {
@@ -647,82 +619,6 @@ inst:hover {
 .form {
   margin-top: 20px;
   margin-bottom: 20px;
-}
-
-.edit_project {
-  margin: 0 auto;
-  width: 850px;
-  margin-top: 30px;
-  margin-bottom: 30px;
-  min-height: 450px;
-  box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.6), 0 0 5px rgba(0, 0, 0, 0.25);
-}
-
-.panel-title {
-  text-align: center;
-  font-family: "PT Sans", sans-serif;
-  /*    font-family: 'Poiret One', cursive;*/
-  font-weight: bold;
-}
-
-.description {
-  width: 500px;
-  background-color: rgba(0, 0, 0, 0.05);
-  /*    border: 1px solid black;*/
-  /*      box-shadow: 3px 5px 10px 0px rgba(0,0,0,0.20), 0 0 5px rgba(0,0,0,0.25);*/
-}
-
-.text_description {
-  font-family: "PT Sans", sans-serif;
-  color: dimgray;
-  font-size: 16px;
-  padding-top: 10px;
-  padding-left: 10px;
-  padding-bottom: 10px;
-}
-
-.tasks_text {
-  width: 500px;
-  margin-left: 15px;
-}
-
-.progress {
-  width: 500px;
-}
-
-.check_task {
-  background-color: orange;
-}
-
-.check_task_off {
-  background-color: burlywood;
-}
-
-.button_edit_project {
-  float: right;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  min-height: 150px;
-  margin-right: 70px;
-  margin-top: 20px;
-  width: 170px;
-  font-family: "PT Sans", sans-serif;
-  color: dimgray;
-}
-
-.right {
-  float: right;
-}
-
-.tasks_users {
-  width: 280px;
-  margin-right: 15px;
-}
-
-.peoples {
-  width: 250px;
-  margin-top: 10px;
 }
 
 .btn_orange {

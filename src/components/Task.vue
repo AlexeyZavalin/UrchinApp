@@ -1,18 +1,13 @@
 <template>
-  <div class="component">
-    
-  </div>
+  <div class="component" />
 </template>
 
 <script>
-import instance from "@/api.js"
 export default {
   data() {
-    return {
-      
-    }
+    return {};
   }
-}
+};
 </script>
 
 

@@ -1,25 +1,26 @@
 <template>
   <div class="projects gallery">
     <div class="row">
-      <div class="col-lg-2 col-sm-4 col-12" v-for="project in projects.results" :key="project.slug">
-        <div class="card">
-          <img src="homework.jpg" class="card-img-top" :alt="project.name">
-          <div class="card-body">
-            <h5 class="card-title">{{ project.name }}</h5>
-            <p class="card-text">{{ project.description }}</p>
-            <p class="card-text">{{ project.slug }}</p>
-            <a href="#" class="btn btn-success but_gallery">Присоединиться</a>
-          </div>
-        </div>
+      <div class="col-lg-2 col-sm-4 col-12" v-for="project in projects.results" :key="project.url">
+        <Project :project="project"/>
       </div>
     </div>
-    <b-pagination-nav :link-gen="linkGen" :number-of-pages="pageCount" use-router></b-pagination-nav>
+    <b-pagination-nav
+      v-if="pageCount > 0"
+      :link-gen="linkGen"
+      :number-of-pages="pageCount"
+      use-router
+    />
   </div>
 </template>
 
 <script>
 import instance from "@/api.js";
+import Project from "@/components/ProjectPreview.vue";
 export default {
+  components: {
+    Project
+  },
   data() {
     return {
       projects: []
@@ -28,31 +29,57 @@ export default {
   computed: {
     pageCount() {
       const count = this.projects.count;
-      return count % 10 === 0
-        ? Math.ceil(count / 10)
-        : Math.round(count / 10) + 1;
+      const perPage = 12;
+      if (count <= perPage) {
+        return 0;
+      } else {
+        if ((count / perPage) % 1 === 0) {
+          return count / perPage;
+        } else {
+          return count / perPage + 1;
+        }
+      }
     }
   },
   watch: {
     $route: "paginate"
   },
   mounted() {
-    instance.get("/project/projects/").then(response => {
-      this.projects = response.data;
-    });
+    if (this.$store.getters.user !== null) {
+      instance
+        .get("/project/projects/", {
+          headers: {
+            Authorization: `Token ${this.$store.getters.user.auth_token}`
+          }
+        })
+        .then(response => {
+          this.projects = response.data;
+        })
+        .catch(error => console.log(error));
+    }
   },
   methods: {
     paginate(route) {
       if (Object.keys(route.query).length != 0) {
         instance
-          .get(`/project/projects/?page=${route.query.page}`)
+          .get(`/project/projects/?page=${route.query.page}`, {
+            headers: {
+              Authorization: `Token ${this.$store.getters.user.auth_token}`
+            }
+          })
           .then(response => {
             this.projects = response.data;
           });
       } else {
-        instance.get("/project/projects/").then(response => {
-          this.projects = response.data;
-        });
+        instance
+          .get("/project/projects/", {
+            headers: {
+              Authorization: `Token ${this.$store.getters.user.auth_token}`
+            }
+          })
+          .then(response => {
+            this.projects = response.data;
+          });
       }
     },
     linkGen(pageCount) {
@@ -64,17 +91,4 @@ export default {
 
 
 <style scoped lang="less">
-.card-body {
-  background: rgba(255, 255, 255, 0.7);
-}
-
-.card {
-  min-height: 310px;
-  box-shadow: 0 0 0 0 transparent;
-  margin-bottom: 30px;
-  transition: 0.3s;
-  &:hover {
-    box-shadow: 0px 15px 20px 0px rgba(0, 0, 0, 0.3), 0 0 5px rgba(0, 0, 0, 0.2);
-  }
-}
 </style>
